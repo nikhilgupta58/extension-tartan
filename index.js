@@ -14,76 +14,27 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// function extractDOM() {
-//   const domDetails = {
-//     title: document.title,
-//     url: window.location.href,
-//     body: document.body.innerHTML,
-//     // Add more details as needed
-//   };
-//   const htmlString = domDetails?.body;
-//   const panRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}/g;
-//   chrome.runtime.sendMessage({ action: "domDetails", data: htmlString });
-
-//   // Extract PAN numbers from HTML string
-//   const panMatches = htmlString.match(panRegex);
-//   const matches = Array.from(htmlString.matchAll(panRegex), (match) => ({
-//     panNumber: match[0],
-//     parentClassName: getParentClassName(htmlString, match.index),
-//   }));
-//   // chrome.runtime.sendMessage({ action: "domDetails", data: "matches" });
-//   // Display the extracted PAN numbers
-//   if (panMatches) {
-//     chrome.runtime.sendMessage({ action: "domDetails", data: panMatches?.[0] });
-//   } else {
-//     chrome.runtime.sendMessage({ action: "domDetails", data: "Nothing found" });
-//   }
-// }
-
 function extractDOM() {
-  const htmlString = document?.body?.innerHTML;
-  const tempElement = document.createElement("div");
-  tempElement.innerHTML = htmlString;
+  const unVerifiedIcon =
+    "https://res.cloudinary.com/dzfkhe75f/image/upload/v1701683698/cursor-click-02-svgrepo-com_tf24yk.svg";
+  const verifedIcon =
+    "https://res.cloudinary.com/dzfkhe75f/image/upload/v1701683393/verify-svgrepo-com_1_xd4tbu.svg";
+  const selector = `span.ng-scope.ng-binding[ng-switch-when="masked"]`;
+  const element = document.querySelector(selector);
+  var button = document.createElement("span");
+  var iconImage = document.createElement("img");
+  iconImage.src = unVerifiedIcon;
+  iconImage.alt = "Unverified Icon";
+  iconImage.width = 30;
+  iconImage.height = 30;
 
-  // Define the regex pattern for PAN
-  const panRegex = /[A-Z]{5}[0-9]{4}[A-Z]/;
-
-  // Function to find the element containing PAN
-  function findElementWithPan(node) {
-    // Check if the current node is a text node
-    if (node.nodeType === Node.TEXT_NODE) {
-      // Check if the text matches the PAN regex
-      if (panRegex.test(node.nodeValue)) {
-        return true;
-      }
-    }
-
-    // Recursively check child nodes
-    for (const childNode of node.childNodes) {
-      if (findElementWithPan(childNode)) {
-        chrome.runtime.sendMessage({
-          action: "dd",
-          data: findElementWithPan(childNode),
-        });
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  // Use the function to find the element
-  const elementWithPan = findElementWithPan(tempElement);
-
-  // Log the result
-  if (elementWithPan) {
-    chrome.runtime.sendMessage({ action: "domDetails", data: elementWithPan });
+  button.appendChild(iconImage);
+  element.appendChild(button);
+  if (element) {
+    console.log(element.outerHTML);
   } else {
-    chrome.runtime.sendMessage({
-      action: "domDetails",
-      data: "elementWithPan",
-    });
+    console.log("empty");
   }
-
-  // Function to get the class name of the parent element
 }
+
+// chrome.runtime.sendMessage({ action: "domDetails", data: elementWithPan });

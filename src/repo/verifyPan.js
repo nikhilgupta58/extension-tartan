@@ -1,4 +1,4 @@
-export function verifyPan(pan) {
+function verifyPan(pan) {
   const payload = {
     category: "individual-pii-data",
     type: "pan-detail-v2",
@@ -18,3 +18,5 @@ export function verifyPan(pan) {
         return response && response.response && response.response.isValid;
     });
 }
+
+module.exports = verifyPan;
